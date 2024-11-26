@@ -114,7 +114,9 @@ def home():
 api = Namespace('collection',description='Collection related OPERATIONS')
 
 query_model = api.model('query_model', {
-    'query': fields.String(required=True, description='What do you want to ask')
+    'query': fields.String(required=True, description='What do you want to ask'),
+    'year': fields.String(required=True, description='year of joining'),
+    'pursuing': fields.String(required=True, description='UG/PG')
 })
 @api.route('/query')
 class answerquery(Resource):
@@ -128,6 +130,7 @@ class answerquery(Resource):
             return result,200     
         except Exception as e:
             api.abort(500, e.__doc__, status = "Could not save information", statusCode = "500")
+
 
 
 
