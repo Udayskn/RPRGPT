@@ -3,16 +3,20 @@ import faiss
 import numpy as np
 from pymongo import MongoClient
 from sentence_transformers import SentenceTransformer
+from dotenv import load_dotenv
+from groq import Groq
+
+load_dotenv()
 
 ##Getting the vectorization model from the directory
 model_directory = "./my_saved_model"
 model = SentenceTransformer(model_directory)
-
+#print(os.getenv("MongoURI"))
 # Connect to DB
 client = MongoClient(os.getenv("MongoURI"))
 # Selecting my database
-db = client.Cluster0
-collection = db["academics"]
+db = client.get_database("Cluster0")
+collection = db.get_collection("academics")
 
 ids = []
 vectors = []
@@ -22,7 +26,7 @@ for document in collection.find():
   vectors.append(vector)
 vectors = np.array(vectors, dtype='float32')
 
-def FaissSearch(query, query_vector, vectors=vectors, k=10):
+def FaissSearch(query, vectors=vectors, k=10):
   
   # Converting the query into a vector
   query_vector = model.encode(query)
@@ -57,6 +61,24 @@ def FaissSearch(query, query_vector, vectors=vectors, k=10):
 
 query = "Tell me about credits and courses for Electrical Engineering"
 
-Context, pages = FaissSearch(query)
+def getResponse(query):
+  client = Groq(api_key=os.getenv("groqAPI"))
+  Context, pages = FaissSearch(query)
 
-print(Context)
+  completion = client.chat.completions.create(
+    model="llama-3.1-70b-versatile",
+    messages=[{"role": "user", "content": Context+query}],
+    temperature=0.2,
+    max_tokens=1024*2,
+    top_p=1,
+    stream=True,
+    stop=None,
+  )
+
+  for chunk in completion:
+    response = getattr(chunk.choices[0].delta, "content", "")
+
+  return response, pages
+
+response, pages = getResponse(query)
+print(response)
