@@ -7,6 +7,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
 from flask_restx import Namespace, Resource, reqparse, fields
+from core import querycore
 
 # Load Google client credentials
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Allow HTTP for local dev
@@ -122,12 +123,9 @@ class answerquery(Resource):
     def post(self):
         try:
             args = query_model.parse_args()
-            # result = cc.add_post_to_default_collection(eh_user_id, args)
-            result={}
-            if result['flag']:
-                return result, 200
-            else:
-                return result, 400     
+            result = querycore.getResponse(args['query'])
+            # result={}
+            return result,200     
         except Exception as e:
             api.abort(500, e.__doc__, status = "Could not save information", statusCode = "500")
 
