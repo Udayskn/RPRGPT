@@ -5,8 +5,11 @@ from pymongo import MongoClient
 from sentence_transformers import SentenceTransformer
 from dotenv import load_dotenv
 from groq import Groq
+import os
 
 load_dotenv()
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 ##Getting the vectorization model from the directory
 model_directory = "./my_saved_model"
@@ -26,7 +29,7 @@ for document in collection.find():
   vectors.append(vector)
 vectors = np.array(vectors, dtype='float32')
 
-def FaissSearch(query, vectors=vectors, k=10):
+def FaissSearch(query, vectors=vectors, k=5):
   
   # Converting the query into a vector
   query_vector = model.encode(query)
@@ -74,11 +77,12 @@ def getResponse(query):
     stream=True,
     stop=None,
   )
-
+  response = ""
   for chunk in completion:
-    response = getattr(chunk.choices[0].delta, "content", "")
+    response += chunk.choices[0].delta.content or ""
 
   return response, pages
 
 response, pages = getResponse(query)
+
 print(response)
