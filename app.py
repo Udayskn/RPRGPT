@@ -6,6 +6,7 @@ from google.oauth2 import id_token
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import Request
+from flask_restx import Namespace, Resource, reqparse, fields
 
 # Load Google client credentials
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Allow HTTP for local dev
@@ -107,7 +108,30 @@ def home():
         return f"Hello, {user.name}! Welocome to RPR GPT<br> <a href='/logout'>Logout</a>"
     else:
         return "You are not logged in. <br> <a href='/login'>Login with Google</a>" 
-     
+
+
+api = Namespace('collection',description='Collection related OPERATIONS')
+
+query_model = api.model('query_model', {
+    'query': fields.String(required=True, description='What do you want to ask')
+})
+@api.route('/query')
+class answerquery(Resource):
+    @api.doc(responses={ 200: 'OK', 400: 'Invalid Argument', 500: 'Mapping Key Error' })
+    @api.expect(query_model)
+    def post(self):
+        try:
+            args = query_model.parse_args()
+            # result = cc.add_post_to_default_collection(eh_user_id, args)
+            result={}
+            if result['flag']:
+                return result, 200
+            else:
+                return result, 400     
+        except Exception as e:
+            api.abort(500, e.__doc__, status = "Could not save information", statusCode = "500")
+
+
 
 if __name__ =="__main__":
     app.run(debug=True)

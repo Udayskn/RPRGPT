@@ -9,7 +9,7 @@ model_directory = "./my_saved_model"
 model = SentenceTransformer(model_directory)
 
 # Connect to DB
-client = MongoClient(os.getenv("MongoURI"))
+client = MongoClient("mongodb+srv://praneethn116:ZJRHLvlrd4LGXGPq@cluster0.d0bev.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 # Selecting my database
 db = client.Cluster0
 collection = db["academics"]
@@ -22,7 +22,7 @@ for document in collection.find():
   vectors.append(vector)
 vectors = np.array(vectors, dtype='float32')
 
-def FaissSearch(query, query_vector, vectors=vectors, k=10):
+def FaissSearch(query, vectors=vectors, k=10):
   
   # Converting the query into a vector
   query_vector = model.encode(query)
@@ -57,6 +57,6 @@ def FaissSearch(query, query_vector, vectors=vectors, k=10):
 
 query = "Tell me about credits and courses for Electrical Engineering"
 
-Context, pages = FaissSearch(query)
+Context, pages = FaissSearch(query,k=5)
 
 print(Context)
