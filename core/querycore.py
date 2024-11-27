@@ -58,7 +58,7 @@ def FaissSearch(query, vectors=vectors, k=5):
   for document in cursor:
     Context += document['text']
     pages.append(document['page_number'])
-  pages = set(pages)
+  pages = list(pages)
 
   return Context, pages
 
@@ -80,9 +80,9 @@ def getResponse(query):
   response = ""
   for chunk in completion:
     response += chunk.choices[0].delta.content or ""
+  query_response={"response":response,"pages":pages}
+  return query_response
 
-  return response, pages
+# response = getResponse(query)
 
-response, pages = getResponse(query)
-
-print(response)
+# print(response)
