@@ -49,7 +49,7 @@ The project aims to:
 - **Enhanced Features**: Add more interactive functionalities, such as visual analytics and notification systems.
 
 ## GitHub Repositories
-- [Backend Repository](https://github.com/Udayskn/RPRGPT)
+- [Backend Repository](https://github.com/susanth-24/RPRGPT-BE)
 - [Frontend Repository](https://github.com/susanth-24/RPRGPT-FE)
 
 ## Conclusion
