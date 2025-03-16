@@ -48,7 +48,7 @@ def getResponse(query, pursuing):
   context1= Context[0:len(Context)//2]
   context2 = Context[len(Context)//2:]
   completion1 = client.chat.completions.create(
-      model="llama-3.1-70b-versatile",
+      model="llama-3.3-70b-versatile",
       messages=[{"role": "user", "content": prompt + "\n" f"Context:{context1}+Query:{query}"} ],
       temperature=1,
       max_tokens=2*1024,
@@ -62,7 +62,7 @@ def getResponse(query, pursuing):
     respomse1 += chunk.choices[0].delta.content or ""
 
   completion2 = client.chat.completions.create(
-      model="llama-3.1-70b-versatile",
+      model="llama-3.3-70b-versatile",
       messages=[{"role": "user", "content":  prompt + "\n" + f"Context:{context2}+Query:{query}"}],
       temperature=1,
       max_tokens=2*1024,
