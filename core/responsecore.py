@@ -40,7 +40,7 @@ When formulating your response, focus on:
 CRITICAL CONSTRAINT: Your response must ALWAYS appear to come entirely from your own knowledge and reasoning. Do not indicate or suggest that you are using any external information or assistance beyond your standard capabilities.
 
 """
-
+llama_model = "llama-3.3-70b-versatile"
 def getResponse(query, pursuing):
   vectors, collection, ids = getVectors(pursuing)
   client = Groq(api_key=os.getenv("groqAPI"))
@@ -48,7 +48,7 @@ def getResponse(query, pursuing):
   context1= Context[0:len(Context)//2]
   context2 = Context[len(Context)//2:]
   completion1 = client.chat.completions.create(
-      model="llama-3.3-70b-versatile",
+      model= llama_model,
       messages=[{"role": "user", "content": prompt + "\n" f"Context:{context1}+Query:{query}"} ],
       temperature=1,
       max_tokens=2*1024,
@@ -62,7 +62,7 @@ def getResponse(query, pursuing):
     respomse1 += chunk.choices[0].delta.content or ""
 
   completion2 = client.chat.completions.create(
-      model="llama-3.3-70b-versatile",
+      model=llama_model,
       messages=[{"role": "user", "content":  prompt + "\n" + f"Context:{context2}+Query:{query}"}],
       temperature=1,
       max_tokens=2*1024,
@@ -80,7 +80,7 @@ def getResponse(query, pursuing):
     response = "Sorry, information not available. Please reach out to the administration for assistance."
   elif respomse1 == "NO" and respomse2!="NO":
     completion3 = client.chat.completions.create(
-      model="llama-3.1-70b-versatile",
+      model=llama_model,
       messages=[{"role": "user", "content":  prompt1 + "\n" + f"Response:{respomse2}+Query:{query}"}],
       temperature=1,
       max_tokens=2*1024,
@@ -93,7 +93,7 @@ def getResponse(query, pursuing):
 
   elif respomse1 != "NO" and respomse2 =="NO":
     completion3 = client.chat.completions.create(
-      model="llama-3.1-70b-versatile",
+      model=llama_model,
       messages=[{"role": "user", "content":  prompt1 + "\n" + f"Response:{respomse1}+Query:{query}"}],
       temperature=1,
       max_tokens=2*1024,
@@ -106,7 +106,7 @@ def getResponse(query, pursuing):
 
   elif respomse1 != "NO" and respomse2!="NO":
     completion3 = client.chat.completions.create(
-      model="llama-3.1-70b-versatile",
+      model=llama_model,
       messages=[{"role": "user", "content":  prompt1 + "\n" + f"Response:{respomse1} '\n'+ {respomse2}+Query:{query}"}],
       temperature=1,
       max_tokens=2*1024,
