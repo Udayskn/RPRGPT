@@ -1,3 +1,5 @@
 .env
 /googleclient.json
 __pycache__/
+*.pyc
+*.pyo
