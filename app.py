@@ -1,11 +1,11 @@
 # import flask, flask_googleauth
 import os
 from flask import Flask, redirect, url_for, session, request
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
-from google.oauth2 import id_token
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import Flow
-from google.auth.transport.requests import Request
+# from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user
+# from google.oauth2 import id_token
+# from google.oauth2.credentials import Credentials
+# from google_auth_oauthlib.flow import Flow
+# from google.auth.transport.requests import Request
 from flask_restx import Namespace, Resource, reqparse, fields,Api
 from core import querycore
 
@@ -137,4 +137,4 @@ class answerquery(Resource):
 
 api.add_namespace(ns)
 if __name__ =="__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)

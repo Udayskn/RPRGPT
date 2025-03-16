@@ -16,7 +16,7 @@ model_directory = "./my_saved_model"
 model = SentenceTransformer(model_directory)
 #print(os.getenv("MongoURI"))
 # Connect to DB
-client = MongoClient("mongodb+srv://praneethn116:ZJRHLvlrd4LGXGPq@cluster0.d0bev.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = MongoClient(os.getenv("MongoURI"))
 # Selecting my database
 db = client.get_database("Cluster0")
 collection = db.get_collection("academics")
@@ -69,7 +69,7 @@ def getResponse(query):
   Context, pages = FaissSearch(query)
 
   completion = client.chat.completions.create(
-    model="llama-3.1-70b-versatile",
+    model="llama-3.3-70b-versatile",
     messages=[{"role": "user", "content": Context+query}],
     temperature=0.2,
     max_tokens=1024*2,

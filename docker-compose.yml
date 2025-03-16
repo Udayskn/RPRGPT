@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: RPR_GPT_main_api
+    command: sh -c "python app.py"
+    ports :
+      - "5000:5000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
