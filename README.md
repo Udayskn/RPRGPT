@@ -1,5 +1,9 @@
 # RPR GPT - Retrieval-Augmented Generation System
 
+## Frontend System
+Refer to
+git - https://github.com/susanth-24/RPRGPT-FE
+
 ## Overview
 RPR GPT is a Retrieval-Augmented Generation (RAG) system designed to simplify access to complex academic resources like UG/PG handbooks, faculty websites, and campus information. It leverages cutting-edge AI technologies to retrieve relevant information and generate context-aware responses efficiently.
 
